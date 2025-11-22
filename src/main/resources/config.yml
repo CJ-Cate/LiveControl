@@ -1,0 +1,28 @@
+###
+### If you are reading this, the config is non-functional. Bug me on discord!
+###
+
+###
+### Config options #
+###
+
+# Give a warning that the server is about to close. Recommended true.
+warn-closing-soon: true
+# If enabled, how many seconds should it be? (15 minute = 900 seconds)
+warn-closing-soon-time: 900
+
+# The amount of minutes that the server should be open by default. 0=forever
+default-open-time: 0
+
+# The amount of minutes to keep the server closed after starting. 0=none
+# Recommended to be a low value. To keep it closed after joining run `/lc close`.
+starting-grace-period: 5
+
+# The amount of minutes after the server closes before everyone is force-kicked
+# Warnings will be automatically be dispensed at one half and one fifth the time.
+# Example: value is 10 minutes, warnings will be at 5 and 2.
+closing-grace-period: 5
+
+# When the server is frozen, every how many minutes should you be reminded?
+# This cannot be turned off but can be put to a very large number.
+reminder-while-frozen: 2
