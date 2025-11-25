@@ -109,10 +109,10 @@ public final class Main extends JavaPlugin {
 
                 // begin final countdown
                 Main.getMain().getServer().setWhitelist(true);
-                int closing_grace_minutes = 5; //TODO: read from config
+                long closing_grace_minutes = 5 * 60_000; //TODO: read from config
                 // These are calculated by closing_grace_minutes * (1 - fraction)
-                double fifth = closing_grace_minutes * 0.8;
-                double half =  closing_grace_minutes * 0.5;
+                long fifth = (long) (closing_grace_minutes * 0.2) * 60_000;
+                long half =  (long) (closing_grace_minutes * 0.5) * 60_000;
 
                 Util.broadcast(
                     "The server is closing! Whitelist has been turned ON!",
@@ -124,20 +124,20 @@ public final class Main extends JavaPlugin {
                 offset = 0; // freeze feature
 
                 // Server closed goodbye everyone! (added in reverse order because of stack FILO)
-                responseStack.add(new ScheduledTask(System.currentTimeMillis() + (long) (closing_grace_minutes * 60_000) + offset,
+                responseStack.add(new ScheduledTask(System.currentTimeMillis() + offset + closing_grace_minutes,
                         () -> {
                             Main.log("LC Debug: Server has reached closing time");
                             Util.broadcast("Goodbye everyone!");
                             Util.kickAllNonWhitelistedPlayers();
                         }));
-                responseStack.add(new ScheduledTask(System.currentTimeMillis() + (long) (fifth * 60_000) + offset,
+                responseStack.add(new ScheduledTask(System.currentTimeMillis() + offset + (closing_grace_minutes - fifth),
                         () -> {
                             Main.log("LC Debug: server a fifth of the way to closing");
                             Util.sendSubtitleToAll("The server closes in " + fifth + " minutes!");
                             Util.broadcast("The server closes in " + fifth + " minutes!");
                             Util.broadcast("You will be kicked with no further warning!");
                         }));
-                responseStack.add(new ScheduledTask(System.currentTimeMillis() + (long) (half * 60_000) + offset,
+                responseStack.add(new ScheduledTask(System.currentTimeMillis() + offset + (closing_grace_minutes - half) ,
                         () -> {
                             Main.log("LC Debug: server half way to closing");
                             Util.sendSubtitleToAll("The server closes in " + half + " minutes!");
