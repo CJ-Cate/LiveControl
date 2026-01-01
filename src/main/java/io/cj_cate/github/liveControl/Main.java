@@ -64,7 +64,8 @@ public final class Main extends JavaPlugin {
 
         this.getServer().setWhitelist(false);
 
-        closingTime = System.currentTimeMillis() + (1000 * 2 * 60); //TODO: change to read from config
+        int hours_in_ms = 3 * (3_600_000); //1 hour = 3_600_000 ms
+        closingTime = System.currentTimeMillis() + hours_in_ms; //TODO: change to read from config
         Commands cmds = new Commands();
         getCommand("livecontrol").setTabCompleter(cmds);
         getCommand("livecontrol").setExecutor(cmds);
