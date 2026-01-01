@@ -121,80 +121,26 @@ public class Commands implements CommandExecutor, TabCompleter {
         return true;
     }
 
-    @Nullable
+    // ChatGPT generated tabcomplete
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {
-            // Main subcommands
-            List<String> subcommands = Arrays.asList("help", "check", "open", "close", "extend", "freeze", "warn", "kickall", "bypass");
-            completions = subcommands.stream()
-                    .filter(s -> s.toLowerCase().startsWith(args[0].toLowerCase()))
-                    .collect(Collectors.toList());
-        } else if (args.length == 2) {
-            String subcommand = args[0].toLowerCase();
+            List<String> commands = new ArrayList<>(Arrays.asList("check", "help"));
 
-            switch (subcommand) {
-                case "open":
-                    // Suggest time in minutes or "0" for indefinite
-                    completions = Arrays.asList("0", "30", "60", "120", "180");
-                    break;
-                case "extend":
-                    // Suggest time values
-                    completions = Arrays.asList("15", "30", "60", "-15", "-30");
-                    break;
-                case "freeze":
-                    // Suggest notify boolean
-                    completions = Arrays.asList("true", "false", "1", "0");
-                    break;
-                case "warn":
-                    // Suggest title boolean
-                    completions = Arrays.asList("true", "false", "1", "0");
-                    break;
-                case "bypass":
-                    // Suggest add/remove
-                    completions = Arrays.asList("add", "remove");
-                    break;
+            if (sender.hasPermission("livecontrol.admin")) {
+                commands.addAll(Arrays.asList("debug", "open", "close", "kickall", "freeze", "unfreeze", "warn", "extend"));
             }
 
-            completions = completions.stream()
-                    .filter(s -> s.toLowerCase().startsWith(args[1].toLowerCase()))
-                    .collect(Collectors.toList());
-        } else if (args.length == 3) {
-            String subcommand = args[0].toLowerCase();
-
-            switch (subcommand) {
-                case "extend":
-                    // Suggest force boolean
-                    completions = Arrays.asList("true", "false", "1", "0");
-                    break;
-                case "warn":
-                    // Suggest sound boolean
-                    completions = Arrays.asList("true", "false", "1", "0");
-                    break;
-                case "bypass":
-                    // Suggest online player names
-                    completions = sender.getServer().getOnlinePlayers().stream()
-                            .map(p -> p.getName())
-                            .collect(Collectors.toList());
-                    break;
-            }
-
-            completions = completions.stream()
-                    .filter(s -> s.toLowerCase().startsWith(args[2].toLowerCase()))
-                    .collect(Collectors.toList());
-        } else if (args.length == 4) {
-            String subcommand = args[0].toLowerCase();
-
-            if (subcommand.equals("bypass")) {
-                // Suggest temporary boolean
-                completions = Arrays.asList("true", "false", "1", "0");
-                completions = completions.stream()
-                        .filter(s -> s.toLowerCase().startsWith(args[3].toLowerCase()))
-                        .collect(Collectors.toList());
+            String partial = args[0].toLowerCase();
+            for (String cmd : commands) {
+                if (cmd.startsWith(partial)) {
+                    completions.add(cmd);
+                }
             }
         }
+
         return completions;
     }
 }
